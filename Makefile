@@ -1,5 +1,5 @@
 build:
-	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/main main.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/main cmd/main.go
 
 deploy: build
 	sls deploy --verbose --stage prod --aws-profile personal
@@ -7,7 +7,7 @@ deploy: build
 run_sls_local: @serverless dev --verbose --stage prod --aws-profile personal
 	
 run:
-	@go run main.go
+	@go run cmd/main.go
 
 test:
 	@go test -v ./..

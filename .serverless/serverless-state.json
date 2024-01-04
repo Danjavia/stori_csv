@@ -210,7 +210,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-api-go/prod/1704380873004-2024-01-04T15:07:53.004Z/serverless-api-go.zip"
+                "S3Key": "serverless/serverless-api-go/prod/1704385659095-2024-01-04T16:27:39.095Z/serverless-api-go.zip"
               },
               "Handler": "bin/main",
               "Runtime": "go1.x",
@@ -240,7 +240,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-api-go/prod/1704380873004-2024-01-04T15:07:53.004Z/serverless-api-go.zip"
+                "S3Key": "serverless/serverless-api-go/prod/1704385659095-2024-01-04T16:27:39.095Z/serverless-api-go.zip"
               },
               "Handler": "bin/main",
               "Runtime": "go1.x",
@@ -270,7 +270,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-api-go/prod/1704380873004-2024-01-04T15:07:53.004Z/serverless-api-go.zip"
+                "S3Key": "serverless/serverless-api-go/prod/1704385659095-2024-01-04T16:27:39.095Z/serverless-api-go.zip"
               },
               "Handler": "bin/main",
               "Runtime": "go1.x",
@@ -293,34 +293,34 @@
               "SendEmailLogGroup"
             ]
           },
-          "PingLambdaVersion4C032XwZHBWPrUZTsDZVYTi5z9s5bb08wxwmv8bjXO8": {
+          "PingLambdaVersion5LyferCbggZ2f4WClMNOX2CssvUcWtNBklyU5m5DuYQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "PingLambdaFunction"
               },
-              "CodeSha256": "QUKOE+0FtiTi6tavlFFhEEoy74kAppdXpacE82vaTec="
+              "CodeSha256": "1K9B0abWly8wBT6SVm94cQNLltbhTfZpJ+LryTdy0h8="
             }
           },
-          "TransactionsLambdaVersion6ut0dYrfBAek3ytd2s3rB4Bq9KSQifs7IWP7we6iKCI": {
+          "TransactionsLambdaVersionw3i6SMOWCXgKyLXr5xUgQk6HXFGOeJYLWzmo69UYfg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "TransactionsLambdaFunction"
               },
-              "CodeSha256": "QUKOE+0FtiTi6tavlFFhEEoy74kAppdXpacE82vaTec="
+              "CodeSha256": "1K9B0abWly8wBT6SVm94cQNLltbhTfZpJ+LryTdy0h8="
             }
           },
-          "SendEmailLambdaVersionnAB6E08HcDRw3YS5MD0ulXLK7qrDoMHaWSu1HDEfCUY": {
+          "SendEmailLambdaVersionLSzEAJWOZU6OHxeDnAi1O7IM5nch58g2xU3xn8GA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SendEmailLambdaFunction"
               },
-              "CodeSha256": "QUKOE+0FtiTi6tavlFFhEEoy74kAppdXpacE82vaTec="
+              "CodeSha256": "1K9B0abWly8wBT6SVm94cQNLltbhTfZpJ+LryTdy0h8="
             }
           },
           "ApiGatewayRestApi": {
@@ -653,7 +653,7 @@
               "SendEmailLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1704380865825": {
+          "ApiGatewayDeployment1704385652805": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -817,7 +817,7 @@
           "PingLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "PingLambdaVersion4C032XwZHBWPrUZTsDZVYTi5z9s5bb08wxwmv8bjXO8"
+              "Ref": "PingLambdaVersion5LyferCbggZ2f4WClMNOX2CssvUcWtNBklyU5m5DuYQ"
             },
             "Export": {
               "Name": "sls-serverless-api-go-prod-PingLambdaFunctionQualifiedArn"
@@ -826,7 +826,7 @@
           "TransactionsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "TransactionsLambdaVersion6ut0dYrfBAek3ytd2s3rB4Bq9KSQifs7IWP7we6iKCI"
+              "Ref": "TransactionsLambdaVersionw3i6SMOWCXgKyLXr5xUgQk6HXFGOeJYLWzmo69UYfg"
             },
             "Export": {
               "Name": "sls-serverless-api-go-prod-TransactionsLambdaFunctionQualifiedArn"
@@ -835,7 +835,7 @@
           "SendEmailLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SendEmailLambdaVersionnAB6E08HcDRw3YS5MD0ulXLK7qrDoMHaWSu1HDEfCUY"
+              "Ref": "SendEmailLambdaVersionLSzEAJWOZU6OHxeDnAi1O7IM5nch58g2xU3xn8GA"
             },
             "Export": {
               "Name": "sls-serverless-api-go-prod-SendEmailLambdaFunctionQualifiedArn"
@@ -993,7 +993,7 @@
         "timeout": 6,
         "runtime": "go1.x",
         "vpc": {},
-        "versionLogicalId": "PingLambdaVersion4C032XwZHBWPrUZTsDZVYTi5z9s5bb08wxwmv8bjXO8"
+        "versionLogicalId": "PingLambdaVersion5LyferCbggZ2f4WClMNOX2CssvUcWtNBklyU5m5DuYQ"
       },
       "transactions": {
         "handler": "bin/main",
@@ -1033,7 +1033,7 @@
         "timeout": 6,
         "runtime": "go1.x",
         "vpc": {},
-        "versionLogicalId": "TransactionsLambdaVersion6ut0dYrfBAek3ytd2s3rB4Bq9KSQifs7IWP7we6iKCI"
+        "versionLogicalId": "TransactionsLambdaVersionw3i6SMOWCXgKyLXr5xUgQk6HXFGOeJYLWzmo69UYfg"
       },
       "sendEmail": {
         "handler": "bin/main",
@@ -1073,7 +1073,7 @@
         "timeout": 6,
         "runtime": "go1.x",
         "vpc": {},
-        "versionLogicalId": "SendEmailLambdaVersionnAB6E08HcDRw3YS5MD0ulXLK7qrDoMHaWSu1HDEfCUY"
+        "versionLogicalId": "SendEmailLambdaVersionLSzEAJWOZU6OHxeDnAi1O7IM5nch58g2xU3xn8GA"
       }
     },
     "resources": {
@@ -1123,7 +1123,7 @@
         ],
         "artifactsS3KeyDirname": "serverless/serverless-api-go/prod/code-artifacts",
         "artifact": "/Users/danjavia/projects/go/projects/csv_technical_test/.serverless/serverless-api-go.zip",
-        "artifactDirectoryName": "serverless/serverless-api-go/prod/1704380873004-2024-01-04T15:07:53.004Z"
+        "artifactDirectoryName": "serverless/serverless-api-go/prod/1704385659095-2024-01-04T16:27:39.095Z"
       },
       "resources": {
         "$ref": "$[\"service\"][\"resources\"]"
@@ -1135,7 +1135,7 @@
     "artifact": "/Users/danjavia/projects/go/projects/csv_technical_test/.serverless/serverless-api-go.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/serverless-api-go/prod/1704380873004-2024-01-04T15:07:53.004Z",
+    "artifactDirectoryName": "serverless/serverless-api-go/prod/1704385659095-2024-01-04T16:27:39.095Z",
     "artifact": "serverless-api-go.zip"
   }
 }
