@@ -1,0 +1,80 @@
+app: stori-csv
+service: serverless-api-go
+
+frameworkVersion: ">=2.24.0"
+
+provider:
+  name: aws
+  runtime: go1.x
+  region: us-east-1
+  stage: ${opt:stage}
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+  ping:
+    handler: bin/main
+    package:
+      include:
+        - ./bin/main
+    events:
+      - http:
+          path: /ping
+          method: GET
+          cors: true
+
+  transactions:
+    handler: bin/main
+    package:
+      include:
+        - ./bin/main
+    events:
+      - http:
+          path: /transactions
+          method: POST
+          cors: true
+
+  sendEmail:
+    handler: bin/main
+    package:
+      include:
+        - ./bin/main
+    events:
+      - http:
+          path: /send-email
+          method: POST
+          cors: true
+
+package:
+  patterns:
+    - "!*/**"
+    - bin/main
+
+resources:
+  Resources:
+    TodosDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
