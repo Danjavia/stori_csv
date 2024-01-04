@@ -9,10 +9,13 @@ interface FileImporterProps {
 export const FileImporter = ({ onImportFile }: FileImporterProps) => {
   const saveTransactions = async (jsonData: string) => {
     try {
-      const result = await fetch("http://localhost:8080/transactions", {
-        method: "POST",
-        body: jsonData,
-      });
+      const result = await fetch(
+        `${process.env.REACT_APP_API_GATEWAY_ENDPOINT}transactions`,
+        {
+          method: "POST",
+          body: jsonData,
+        }
+      );
 
       console.log("Result", await result.json());
     } catch (e: any) {
@@ -107,6 +110,7 @@ export const FileImporter = ({ onImportFile }: FileImporterProps) => {
 
         <input
           id="dropzone-file"
+          accept="text/csv"
           type="file"
           className="hidden"
           onChange={handleUpload}
