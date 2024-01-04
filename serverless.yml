@@ -33,7 +33,6 @@ functions:
       - http:
           path: /ping
           method: GET
-          cors: true
 
   transactions:
     handler: bin/main
@@ -44,7 +43,6 @@ functions:
       - http:
           path: /transactions
           method: POST
-          cors: true
 
   sendEmail:
     handler: bin/main
@@ -55,7 +53,6 @@ functions:
       - http:
           path: /send-email
           method: POST
-          cors: true
 
 package:
   patterns:
@@ -78,3 +75,12 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
+    GatewayResponseDefault4XX:
+      Type: "AWS::ApiGateway::GatewayResponse"
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: "ApiGatewayRestApi"

@@ -21,6 +21,8 @@ func init() {
 	log.Printf("Gin cold start")
 	r := gin.Default()
 
+	r.Use(cors.Default())
+
 	r.GET("/ping", api.Ping)
 	r.POST("/transactions", api.CheckTransactions)
 	r.POST("/send-email", api.SendEmail)
@@ -38,9 +40,7 @@ func main() {
 
 	lambda.Start(Handler)
 
-	router := gin.Default()
+	// router := gin.Default()
 
-	router.Use(cors.Default())
-
-	router.Run(":8080")
+	// router.Run(":8080")
 }
