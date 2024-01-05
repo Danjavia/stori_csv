@@ -29,7 +29,9 @@ This endpoint receives the `Transaction Struct` formatted to JSON data plus `use
 # How To Run Frontend (web) Folder
 
 - copy file `.env.example` -> `.env`
-- run `yarn start`
+- set env variables
+- run `pnpm install`
+- run `pnpm start`
 - open browser at (http://localhost:3000)
 
 # Authorization
