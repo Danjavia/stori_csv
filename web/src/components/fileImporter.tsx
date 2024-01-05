@@ -127,11 +127,7 @@ export const FileImporter = ({ onImportFile }: FileImporterProps) => {
           placeholder="john@doe.com"
         />
         <p id="helper-text-explanation" className="mt-2 text-sm text-gray-500">
-          We’ll never share your details. Read our{" "}
-          <a href="#" className="font-medium text-blue-600 hover:underline">
-            Privacy Policy
-          </a>
-          .
+          We’ll never share your details. This is a test website 😊
         </p>
       </div>
 
@@ -159,6 +155,12 @@ export const FileImporter = ({ onImportFile }: FileImporterProps) => {
           className="hidden"
           onChange={handleUpload}
         />
+      </div>
+
+      <div className="mt-4">
+        <a href="/txns.csv" className="underline hover:text-lime-900" download>
+          Download sample file here
+        </a>
       </div>
     </div>
   );
