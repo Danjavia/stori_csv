@@ -23,6 +23,11 @@ provider:
             - dynamodb:DeleteItem
           Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/summary"
 
+        - Effect: Allow
+          Action:
+            - ses:*
+          Resource: "*"
+
 useDotenv: true
 
 functions:
@@ -80,7 +85,7 @@ resources:
         PublicAccessBlockConfiguration:
           BlockPublicAcls: false
           BlockPublicPolicy: false
-          IgnorePublicAcls: true
+          IgnorePublicAcls: false
           RestrictPublicBuckets: false
 
     SummaryTable:
