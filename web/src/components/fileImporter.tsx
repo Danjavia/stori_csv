@@ -158,7 +158,11 @@ export const FileImporter = ({ onImportFile }: FileImporterProps) => {
       </div>
 
       <div className="mt-4">
-        <a href="/txns.csv" className="underline hover:text-lime-900" download>
+        <a
+          href="/files/txns.csv"
+          className="underline hover:text-lime-900"
+          download="sample.csv"
+        >
           Download sample file here
         </a>
       </div>
