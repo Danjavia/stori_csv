@@ -1,5 +1,5 @@
-app: stori-csv
-service: sls-stori-csv
+app: stori-web
+service: sls-stori-web-csv
 
 frameworkVersion: "3"
 
@@ -81,7 +81,7 @@ resources:
     s3:
       Type: "AWS::S3::Bucket"
       Properties:
-        BucketName: "stori-csv-${opt:stage, 'dev'}-files"
+        BucketName: "stori-${opt:stage, 'dev'}-files"
         PublicAccessBlockConfiguration:
           BlockPublicAcls: false
           BlockPublicPolicy: false
