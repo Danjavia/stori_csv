@@ -61,10 +61,10 @@ func CheckTransactions(client *dynamodb.Client) gin.HandlerFunc {
 
 		summary := &models.Summary{
 			ID:          uuid.New().String(),
-			UserId:      "",
-			UserEmail:   "",
-			Summary:     "",
-			ArtifactUrl: "",
+			UserId:      "asdfasdfasdfasfaefeefasef",
+			UserEmail:   "sample@mail.com",
+			Summary:     "{}",
+			ArtifactUrl: "https://sampleurl",
 		}
 
 

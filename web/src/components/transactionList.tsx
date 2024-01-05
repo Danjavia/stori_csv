@@ -8,7 +8,7 @@ interface TransactionListProps {
 }
 
 export const TransactionList = ({ headers, data }: TransactionListProps) => {
-  const { login, register } = useKindeAuth();
+  const { register } = useKindeAuth();
 
   const authorize = () => {
     register({
@@ -48,7 +48,7 @@ export const TransactionList = ({ headers, data }: TransactionListProps) => {
                   const className = clsx(
                     "px-6 py-4 whitespace-nowrap",
                     cell.startsWith("-") && "font-bold text-red-600",
-                    cell.startsWith("+") && "font-bold text-green-600",
+                    cell.startsWith("+") && "font-bold text-green-600"
                   );
 
                   return (

@@ -28,8 +28,8 @@ export const FileImporter = ({ onImportFile }: FileImporterProps) => {
     const fileName = `summary-${Date.now()}-${file?.name}`;
 
     AWS.config.update({
-      accessKeyId: process.env.REACT_APP_AWS_S3_ACCESS_KEY_ID, // "AKIARMXILDX64MZYQD4C",
-      secretAccessKey: process.env.REACT_APP_AWS_S3_SECRET_ACCESS_KEY, // "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",
+      accessKeyId: process.env.REACT_APP_AWS_S3_ACCESS_KEY_ID,
+      secretAccessKey: process.env.REACT_APP_AWS_S3_SECRET_ACCESS_KEY,
     });
 
     const s3 = new AWS.S3({

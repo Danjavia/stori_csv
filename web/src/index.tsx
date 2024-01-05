@@ -6,19 +6,22 @@ import reportWebVitals from "./reportWebVitals";
 import { KindeProvider } from "@kinde-oss/kinde-auth-react";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement,
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <KindeProvider
-      clientId="5d88970b3ecc4f119ea3649941492f18"
-      domain="https://csvtest.kinde.com"
+      clientId={process.env.REACT_APP_KINDE_CLIENT_ID}
+      domain={process.env.REACT_APP_KINDE_ISSUER_URL ?? ""}
       logoutUri={window.location.origin}
       redirectUri={window.location.origin}
+      onRedirectCallback={(user, app_state) => {
+        console.log({ user, app_state });
+      }}
     >
       <App />
     </KindeProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
