@@ -58,8 +58,6 @@ const App = () => {
           <img src={Logo} alt="Stori" className="mb-4" />
         </div>
       </main>
-
-      {/*{file && <pre>{jsonData}</pre>}*/}
     </div>
   );
 };

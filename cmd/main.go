@@ -41,9 +41,9 @@ func init() {
 
 	r.Use(cors.Default())
 
-	r.GET("/ping", api.Ping)
+	// Available services
 	r.POST("/transactions", api.CheckTransactions(client))
-	r.POST("/send-email", api.SendEmail)
+	r.POST("/send-email", api.SendEmail(client))
 
 	ginLambda = ginadapter.New(r)
 }
