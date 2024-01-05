@@ -11,12 +11,16 @@
 
 ## Enabled Services
 
-- API_GATEWAY_URL/prod/transactions
+- TRANSACTIONS `API_GATEWAY_URL/prod/transactions`
 
 This endpoint receives the file content of `txns.csv` in JSON format and transform to `Transaction Struct`
 `cmd/api/transactions.go:15` and save data into `summary` table on Dynamo in AWS
 
-- API_GATEWAY_URL/prod/send-email
+These file is uploaded to S3 bucket as back up of the file uploaded by user in `REACT_APP_AWS_S3_BUCKET` bucket
+
+- The bucket get name from app service `serverless.yml:84`
+
+- SEND_EMAIL: `API_GATEWAY_URL/prod/send-email`
 
 This endpoint receives the `Transaction Struct` formatted to JSON data plus `userId`, `userEmail`, `artifactUrl` and send email with template located on AWS via `Amazon Simple Email Service` with custom template `STORI_TMPL` on `cmd/api/send-email.go:89` based on data via API
 
@@ -27,3 +31,7 @@ This endpoint receives the `Transaction Struct` formatted to JSON data plus `use
 - copy file `.env.example` -> `.env`
 - run `yarn start`
 - open browser at (http://localhost:3000)
+
+# Authorization
+
+Tha Auth services is made vi [kinde](https://kinde.com) service to generate userId and user info (name and email)

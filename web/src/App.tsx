@@ -7,7 +7,7 @@ import Logo from "./assets/images/logo.svg";
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 
 const App = () => {
-  const { login, logout, isAuthenticated, user, getUser } = useKindeAuth();
+  const { login, logout, isAuthenticated } = useKindeAuth();
   const [data, setData] = useState<string[][] | null>(null);
   const [headers, setHeaders] = useState<string[] | null>(null);
 
@@ -19,12 +19,6 @@ const App = () => {
   const signin = () => {
     login();
   };
-
-  useEffect(() => {
-    console.log(user);
-    const u = getUser;
-    console.log(u);
-  }, []);
 
   return (
     <div>
