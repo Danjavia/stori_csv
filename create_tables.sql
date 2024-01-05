@@ -8,6 +8,7 @@ CREATE TABLE summary (
   id INT NOT NULL AUTO_INCREMENT,
   user_id VARCHAR(36) NOT NULL,
   summary JSON,
+  related_file VARCHAR(255)
   PRIMARY KEY (id),
   CONSTRAINT fk_summary_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 );

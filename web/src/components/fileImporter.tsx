@@ -1,6 +1,7 @@
 import React from "react";
 import { toObjectArray } from "../utils/utils";
 import { IData } from "../types/data";
+import AWS from "aws-sdk";
 
 interface FileImporterProps {
   onImportFile: (data: IData) => void;
@@ -23,13 +24,55 @@ export const FileImporter = ({ onImportFile }: FileImporterProps) => {
     }
   };
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadFileToS3 = async (file: File): Promise<string | null> => {
+    const fileName = `summary-${Date.now()}-${file?.name}`;
+
+    AWS.config.update({
+      accessKeyId: process.env.REACT_APP_AWS_S3_ACCESS_KEY_ID, // "AKIARMXILDX64MZYQD4C",
+      secretAccessKey: process.env.REACT_APP_AWS_S3_SECRET_ACCESS_KEY, // "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",
+    });
+
+    const s3 = new AWS.S3({
+      params: {
+        Bucket: process.env.REACT_APP_AWS_S3_BUCKET,
+        region: process.env.REACT_APP_AWS_REGION,
+      },
+    });
+
+    try {
+      const params = {
+        Bucket: process.env.REACT_APP_AWS_S3_BUCKET,
+        Key: fileName,
+        Body: file,
+      };
+
+      await s3
+        // @ts-ignore
+        .putObject(params)
+        .on("httpUploadProgress", (evt) => {
+          console.log(
+            // @ts-ignore
+            "Uploading " + parseInt((evt.loaded * 100) / evt.total) + "%"
+          );
+        })
+        .promise();
+
+      return fileName;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      return null;
+      // Handle errors gracefully, informing the user if needed
+    }
+  };
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
+
     let jsonData = "";
 
     // Read CSV file
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       // @ts-ignore
       const rows = reader.result.split("\n");
       const parsedData = rows.map((row: any) => row.split(","));
@@ -50,6 +93,7 @@ export const FileImporter = ({ onImportFile }: FileImporterProps) => {
     };
 
     if (file) {
+      uploadFileToS3(file);
       reader.readAsText(file);
     }
   };

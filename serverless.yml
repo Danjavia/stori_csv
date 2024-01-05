@@ -1,15 +1,15 @@
 app: stori-csv
-service: serverless-api-go
+service: sls-stori-csv
 
-frameworkVersion: ">=2.24.0"
+frameworkVersion: "3"
 
 provider:
   name: aws
   runtime: go1.x
   region: us-east-1
-  stage: ${opt:stage}
+  stage: ${opt:stage, 'dev'}
   environment:
-    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    DYNAMODB_TABLE: summary
   iam:
     role:
       statements:
@@ -21,7 +21,9 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
-          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/summary"
+
+useDotenv: true
 
 functions:
   ping:
@@ -61,20 +63,6 @@ package:
 
 resources:
   Resources:
-    TodosDynamoDbTable:
-      Type: "AWS::DynamoDB::Table"
-      DeletionPolicy: Retain
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
     GatewayResponseDefault4XX:
       Type: "AWS::ApiGateway::GatewayResponse"
       Properties:
@@ -84,3 +72,31 @@ resources:
         ResponseType: DEFAULT_4XX
         RestApiId:
           Ref: "ApiGatewayRestApi"
+
+    s3:
+      Type: "AWS::S3::Bucket"
+      Properties:
+        BucketName: "stori-csv-${opt:stage, 'dev'}-files"
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: false
+
+    SummaryTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: summary
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: "N"
+          - AttributeName: user_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH # Partition key
+          - AttributeName: user_id
+            KeyType: RANGE # Sort key
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5 # Adjust as needed
+          WriteCapacityUnits: 5 # Adjust as needed

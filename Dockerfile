@@ -10,7 +10,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o app
+RUN go build -o bin/main cmd/main.go
 
 EXPOSE 8080
 
