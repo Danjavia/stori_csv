@@ -13,8 +13,11 @@ root.render(
     <KindeProvider
       clientId={process.env.REACT_APP_KINDE_CLIENT_ID}
       domain={process.env.REACT_APP_KINDE_ISSUER_URL ?? ""}
-      logoutUri={window.location.origin}
-      redirectUri={window.location.origin}
+      logoutUri={process.env.REACT_APP_KINDE_SITE_URL ?? window.location.origin}
+      redirectUri={
+        process.env.REACT_APP_KINDE_POST_LOGIN_REDIRECT_URL ??
+        window.location.origin
+      }
       onRedirectCallback={(user, app_state) => {
         console.log({ user, app_state });
       }}
