@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: stori-posgres
+    environment:
+      POSTGRES_USER: danjavia
+      POSTGRES_PASSWORD: djvx2024
+      POSTGRES_DB: stori
+    volumes:
+      - type: bind
+        source: ./cmd/infraestructure/db
+        target: /docker-entrypoint-initdb.d # Path inside the container
+    ports:
+      - "5432:5432"
+
+  golang:
+    container_name: stori-golang
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_USER: danjavia
+      DB_PASSWORD: djvx2024
+      DB_NAME: stori
+
+volumes:
+  postgres-data:
