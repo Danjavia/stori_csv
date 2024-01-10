@@ -1,85 +1,43 @@
-package db
+package database
 
 import (
-	"context"
+    "context"
+    "database/sql"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	"github.com/danjavia/stori_csv/cmd/infraestructure/models"
+    "github.com/danjavia/stori_csv/cmd/infraestructure/models"
+    _ "github.com/lib/pq" // Import the Postgres driver
 )
 
-// Helper function to handle attribute value types consistently
-func getValueAsString(v types.AttributeValue) string {
-  switch v := v.(type) {
-  case *types.AttributeValueMemberS:
-      return v.Value
-  case *types.AttributeValueMemberN:
-      return v.Value // Assuming numbers are stored as strings in DynamoDB
-  default:
-      // Log or handle unexpected attribute value types
-      return "" // Return an empty string as a fallback
-  }
+func CreateSummary(ctx context.Context, db *sql.DB, summary *models.Summary) error {
+    query := `INSERT INTO summary (id, user_id, user_email, summary, artifact_url)
+               VALUES ($1, $2, $3, $4, $5)`
+    stmt, err := db.PrepareContext(ctx, query)
+    if err != nil {
+        return err
+    }
+    defer stmt.Close()
+
+    _, err = stmt.ExecContext(ctx, summary.ID, summary.UserId, summary.UserEmail, summary.Summary, summary.ArtifactUrl)
+    return err
 }
 
+func GetSummaries(ctx context.Context, db *sql.DB, userId string) ([]*models.Summary, error) {
+    query := `SELECT id, user_id, user_email, summary, artifact_url FROM summary WHERE user_id = $1`
+    rows, err := db.QueryContext(ctx, query, userId)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
 
-func CreateSummary(ctx context.Context, client *dynamodb.Client, summary *models.Summary) error {
-  // Create the request
-  input := &dynamodb.PutItemInput{
-    TableName: aws.String("summary"),
-    Item: map[string]types.AttributeValue{
-      "id": &types.AttributeValueMemberS{Value: summary.ID},
-      "userId": &types.AttributeValueMemberS{Value: summary.UserId},
-      "email": &types.AttributeValueMemberS{Value: summary.UserEmail},
-      "summary": &types.AttributeValueMemberS{Value: summary.Summary},
-      "artifactUrl": &types.AttributeValueMemberS{Value: summary.ArtifactUrl},
-    },
-  }
+    summaries := []*models.Summary{}
+    for rows.Next() {
+        summary := &models.Summary{}
+        err := rows.Scan(&summary.ID, &summary.UserId, &summary.UserEmail, &summary.Summary, &summary.ArtifactUrl)
+        if err != nil {
+            return nil, err
+        }
+        summaries = append(summaries, summary)
+    }
 
-  // Send the request
-  _, err := client.PutItem(ctx, input)
-  return err
-}
-
-func GetSummaries(ctx context.Context, client *dynamodb.Client, userId string) ([]*models.Summary, error) {
-  // Create the query input
-  input := &dynamodb.QueryInput{
-      TableName: aws.String("summary"),
-      KeyConditionExpression: aws.String("userId = :userId"),
-      ExpressionAttributeValues: map[string]types.AttributeValue{
-          ":userId": &types.AttributeValueMemberS{Value: userId},
-      },
-  }
-
-  // Send the query
-  result, err := client.Query(ctx, input)
-  if err != nil {
-      return nil, err
-  }
-
-  // Parse the response and create summary objects
-  summaries := []*models.Summary{}
-
-  for _, item := range result.Items {
-      summary := &models.Summary{}
-      for k, v := range item {
-          switch k {
-          case "id":
-              summary.ID = getValueAsString(v) // Handle both string and number types
-          case "userId":
-              summary.UserId = getValueAsString(v)
-          case "email":
-              summary.UserEmail = getValueAsString(v)
-          case "summary":
-              summary.Summary = getValueAsString(v)
-          case "artifactUrl":
-              summary.ArtifactUrl = getValueAsString(v)
-          default:
-              // Log or handle unexpected attributes
-          }
-      }
-      summaries = append(summaries, summary)
-  }
-
-  return summaries, nil
+    return summaries, nil
 }

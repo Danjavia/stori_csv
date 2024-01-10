@@ -1,59 +1,34 @@
 package main
 
 import (
-	"context"
-	"log"
+    "database/sql"
+    "log"
 
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-
-	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
-	"github.com/danjavia/stori_csv/cmd/api"
-
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+    "github.com/danjavia/stori_csv/cmd/api"
+    "github.com/gin-contrib/cors"
+    "github.com/gin-gonic/gin"
+    _ "github.com/lib/pq"
 )
 
-
-var ginLambda *ginadapter.GinLambda
-
-
-func init() {
-	log.Printf("Gin cold start")
-
-	// Initialize configuration
-	cfg, err := config.LoadDefaultConfig(context.TODO(),
-		config.WithRegion("us-east-1"), // Replace with your desired region
-	)
-
-	if err != nil {
-		// Handle configuration loading errors
-		panic(err) // Or use a more graceful error handling mechanism
-	}
-
-	// Create DynamoDB client
-	client := dynamodb.NewFromConfig(cfg)
-
-
-	r := gin.Default()
-
-	r.Use(cors.Default())
-
-	// Available services
-	r.POST("/transactions", api.CheckTransactions(client))
-	r.POST("/send-email", api.SendEmail(client))
-
-	ginLambda = ginadapter.New(r)
-}
-
-func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	// If no name is provided in the HTTP request body, throw an error
-	return ginLambda.ProxyWithContext(ctx, req)
-}
-
-
 func main() {
-	lambda.Start(Handler)
+    log.Printf("Starting application")
+
+    // Connect to Postgres database
+    db, err := sql.Open("postgres", "postgres://danjavia:djvx2024@5432:5432/stori")
+    if err != nil {
+        log.Fatal(err) // Handle error gracefully
+    }
+
+    r := gin.Default()
+
+    r.Use(cors.Default())
+
+    // Available services (using Postgres adapter functions)
+    r.POST("/transactions", api.CheckTransactions(db))
+    r.POST("/send-email", api.SendEmail(db))
+
+    // Start the Gin server
+    if err := r.Run(":8080"); err != nil {
+        log.Fatal(err)
+    }
 }

@@ -1,6 +1,7 @@
 package api
 
 import (
+    "database/sql"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -8,7 +9,7 @@ import (
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+    _ "github.com/lib/pq" 
 	"github.com/aws/aws-sdk-go-v2/service/ses"
 	"github.com/aws/aws-sdk-go-v2/service/ses/types"
 	"github.com/aws/aws-sdk-go/aws"
@@ -20,23 +21,6 @@ type EmailInfo struct {
 	Subject     string  `json:"subject"`
 	Data  		float64 `json:"data"`
 }
-
-// const (
-//     Sender = "danjavia@gmail.com"
-
-//     Recipient = "danjavia@gmail.com"
-    
-//     Subject = "Prueba de envio de summary"
-    
-//     HtmlBody =  "<h1>Welcome to summary " +
-//                 "<a href='https://aws.amazon.com/ses/'>Amazon SES</a> using the " +
-//                 "<a href='https://aws.amazon.com/sdk-for-go/'>AWS SDK for Go</a>.</p>"
-    
-//     // This field is for emiails without html support.
-//     TextBody = "This email was sent with Amazon SES using the AWS SDK for Go."
-    
-//     CharSet = "UTF-8"
-// )
 
 type EmailRequestBody struct {
     ReceiverEmail string            `json:"receiverEmail"`
@@ -54,7 +38,7 @@ func sendTemplatedEmail(client *ses.Client, input *ses.SendTemplatedEmailInput) 
     return *output.MessageId, nil
 }
 
-func SendEmail(client *dynamodb.Client) gin.HandlerFunc {
+func SendEmail(db *sql.DB) gin.HandlerFunc {
     return func (c *gin.Context) {
         var emailInfo EmailInfo
 

@@ -1,6 +1,6 @@
 module github.com/danjavia/stori_csv
 
-go 1.21.5
+go 1.19
 
 require (
 	github.com/aws/aws-lambda-go v1.43.0
